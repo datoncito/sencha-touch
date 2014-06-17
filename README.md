@@ -1,0 +1,4 @@
+sencha-touch
+============
+
+Sencha basico
