@@ -34,7 +34,7 @@ var panelPrimera={
             instructions:'Todos los campos son requeridos',
             items:[
                 {
-                    html:['<center><h1>Calculo del interes simple</h1>',
+                    html:['<img src="img/icono-calculadora.png" /><center><h1>Calculo del interes simple</h1>',
                          '<p>Llena cada uno de los campos y oprime el boton calcular</center>',
                     ].join('')
                 },
@@ -52,7 +52,12 @@ var panelPrimera={
                 },
                 {
                     xtype:'button',
-                    text:'calcular préstamo'
+                    text:'calcular préstamo',
+                    handler:function(){
+                        /* Aqui haces todos tus calculos, a cada textfield debes asignarle un id para poder
+                         * llamarlos con Ext.getCmp('tu-id') */
+                        Ext.Msg.confirm('Resultado', 'Aqui va un resultaddo de tu xxx calculor');
+                    }
                 }
             ]
     
