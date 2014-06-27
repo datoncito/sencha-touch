@@ -1,15 +1,44 @@
 //var email = Ext.getCmp('email').getValue();
+// Ajustamos un model para llenar nuestro storesito
+Ext.define('Usuario', {
+    extend: 'Ext.data.Model',
+    config: {
+        fields: [
+            {name:'id',type:'int'},
+            {name: 'nombre', type: 'string'},
+            {name: 'edad',   type: 'int'}
+        ],
+        proxy: {
+        type: "rest",
+        url : "http://localhost:8084/springmaven/servicios/hola/json",
+        
+    
+        reader: {
+            type: "json",
+            rootProperty: "usuarios"
+        } 
+     }
+    }
+});
+
+
+var store = Ext.create("Ext.data.Store", {
+    autoLoad: true,
+    model: "Usuario"
+  
+});
 
 
 Ext.application({
     
 name: 'HolaMundo',
 launch: function () {
- 
+ var mensaje='';
 //Ext.Msg.alert('Bienvenidos la suma es '+z);
 
  Ext.create('Ext.form.Panel', {
     fullscreen: true,
+    id:'panelsote',
     items: [
         {
             xtype: 'fieldset',
@@ -45,8 +74,12 @@ launch: function () {
 
 //GET /users/123
 store.load();
+
 var usuarios=Ext.ModelManager.getModel('Usuario') ;    
 console.log("Usuarios  cargados "+store.getAllCount());
+mensaje=mensaje+"Usuarios  cargados "+store.getAllCount();
+ Ext.getCmp('formulario').setInstructions("Usuarios  cargados"); 
+
 /*
  * El siguiente va a hacer que se invoque el metodo put, cuando quieras que se active la siguiente url:
  * @RequestMapping(value="/json/{id}", method=RequestMethod.PUT, headers={"Accept=Application/json"})
@@ -55,7 +88,7 @@ console.log("Usuarios  cargados "+store.getAllCount());
 var usuario2=Ext.create('Usuario',{id:3});
 usuario2.save({
     success: function(usuario2) {
-        usuario2.set('nombre', 'Kum Kum el cavernicola');
+        usuario2.set('nombre', 'EL PUTITO QUE LE GUSTA LA MASACUATA DE BURRO');
         usuario2.set('edad',33);
         usuario2.save(); //PUT /users/123
     }
@@ -71,6 +104,7 @@ var usuariopost = Ext.create('Usuario', {nombre: 'Ed Spencer', edad:27});
         usuariopost.save({
     success: function(ed) {
         console.log("El nombre que se ha guardado es este:"+ ed.get("nombre"));
+        mensaje=mensaje+"El nombre que se ha guardado es este:"+ ed.get("nombre");
     },
     failure:function(ed){
         console.log('nada'+ed.nombre);
@@ -85,16 +119,24 @@ var usuariopost = Ext.create('Usuario', {nombre: 'Ed Spencer', edad:27});
 */
 //GET /users/123
 //Usuario.load(123,{     //el siguiente lo puse porque funciona con el di o por nombre, siempre y cuando tenga el correspondiente PathVariable en el controller
-Usuario.load("juan", {
+Usuario.load(2, {
     success: function(usuario) {
-        console.log(usuario.get("nombre")); //outputs 123
+        console.log("holoa"+usuario.getId()); //outputs 123
+        mensaje=mensaje+"holoa"+usuario.getId();
     }
 });              
                         
-                        
+         Ext.getCmp('formulario').setInstructions(mensaje);               
                         
 
                         
+                    }
+                },{
+                    xtype:'button',
+                    text:'oprimememe y veras!!',
+                    ui:'confirm',
+                    handler:function(){
+                        Ext.getCmp('panelsote').removeAll(false,true);
                     }
                 }
                 
@@ -114,31 +156,3 @@ Usuario.load("juan", {
     }
 });
 
-// Ajustamos un model para llenar nuestro storesito
-Ext.define('Usuario', {
-    extend: 'Ext.data.Model',
-    config: {
-        fields: [
-            {name:'id',type:'int'},
-            {name: 'nombre', type: 'string'},
-            {name: 'edad',   type: 'int'}
-        ],
-        proxy: {
-        type: "rest",
-        url : "http://localhost:8084/springmaven/servicios/hola/json",
-        
-    
-        reader: {
-            type: "json",
-            rootProperty: "usuarios"
-        } 
-     }
-    }
-});
-
-
-var store = Ext.create("Ext.data.Store", {
-    autoLoad: true,
-    model: "Usuario"
-  
-});
